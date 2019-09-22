@@ -6,6 +6,7 @@
 #
 require 'optparse'
 require_relative 'creater/from_file'
+require_relative 'creater/from_directory'
 
 lang = ""
 type = ""
@@ -68,7 +69,8 @@ if type == "F"
   exit(creater.do)
 elsif type  == "D"
   # Directoryからの生成
-  exit(0)
+  creater = FromDir.new(lang, path)
+  exit(creater.do)
 end
 
 puts type
