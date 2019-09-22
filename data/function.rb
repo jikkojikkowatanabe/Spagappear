@@ -1,6 +1,10 @@
 
 class Function
 
+  attr_accessor :name,
+                :ret,
+                :attr
+
   # <editor-fold desc="初期化">
 
   #

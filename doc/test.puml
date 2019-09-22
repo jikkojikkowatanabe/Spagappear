@@ -1,0 +1,14 @@
+@startuml
+
+
+package abc{
+  class abc{
+    - this
+  }
+}
+
+class deg {
+  - alt
+}
+
+@enduml

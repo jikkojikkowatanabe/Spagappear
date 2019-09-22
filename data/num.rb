@@ -2,6 +2,12 @@
 
 class Num
 
+  attr_accessor :name,
+                :type,
+                :attr,
+                :is_static,
+                :is_final
+
   # <editor-fold desc="初期化">
 
   #

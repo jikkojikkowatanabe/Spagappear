@@ -1,10 +1,15 @@
 
 class Clazz
 
-  # <editor-fold desc="accesser">
+  # <editor-fold desc="accessor">
 
   attr_accessor :inner_classes,
-                :name
+                :name,
+                :attr,
+                :extends,
+                :implement,
+                :functions,
+                :nums
 
   # </editor-fold>
 

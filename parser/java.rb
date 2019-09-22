@@ -108,14 +108,14 @@ class Java < Parser
       end
 
       # parsing classの最後(現在読み取り中であるもの) に (変|定)数をセットする
-      if is_num(line) and !block_elements.include?(BLOCK_ELEMENT_FUNCTION) and block_elements.include?(BLOCK_ELEMENT_CLASS)
+      if is_num(line) and !is_block_start(line) and !block_elements.include?(BLOCK_ELEMENT_FUNCTION) and block_elements.include?(BLOCK_ELEMENT_CLASS)
         # parsing classの最後(現在読み取り中であるもの) に (変|定)数をセットする
         parsing_classes.last.add_num(get_num(line))
         next
       end
 
       # functionの始まりの行である場合はfunction中のフラグをあげ、読み取り中classをセットする
-      if is_start_function(line)
+      if is_start_function(line) and !is_if_start(line)
         block_elements.push(BLOCK_ELEMENT_FUNCTION)
         parsing_function = get_function(line)
         is_functioning = true
@@ -464,6 +464,21 @@ class Java < Parser
       line.sub!(/#{info_func_name}/, "")
     end
     Function.new(name, ret, attr)
+  end
+
+  # </editor-fold>
+
+  # <editor-fold desc="If系">
+
+  #
+  # Ifの始まりの行であるかを判定する
+  #
+  # @param line : 行の文字列
+  # @return : Ifの行である場合はTrueを返す
+  #
+  def is_if_start(line)
+    if_start = JAVA_INFO[INFO_KEY_IF_START]
+    line.match(/#{if_start}/) != nil
   end
 
   # </editor-fold>

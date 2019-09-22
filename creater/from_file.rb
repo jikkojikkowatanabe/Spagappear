@@ -2,25 +2,17 @@
 #
 #
 
+require_relative '../base/creater'
 require_relative '../const'
 require_relative '../function/reader'
 require_relative '../parser/java'
+require_relative '../plant_uml/modeling'
+require 'fileutils'
 
 #
 #
 #
-class FromFile
-
-  #
-  # 初期化
-  #
-  # _lang_ : 依存図作成言語
-  # _file_ : 依存図作成ファイル
-  #
-  def initialize( lang, file )
-    @lang = lang
-    @file = file
-  end
+class FromFile < BaseCreater
 
   #
   # 作成の実行
@@ -43,6 +35,19 @@ class FromFile
     # ファイル内容のParse
     parser = Java.new(reader.result)
     parser.do
+
+    # plant umlの生成の開始
+    modeler = Modeling.new(@lang ,parser.resource)
+    generate_file = modeler.do
+
+    # templateを取得
+    over_view = get_template
+
+    # 全体図に生成したClass図を書き込む
+    over_view.gsub!("$CLASS$", generate_file)
+
+    # 結果を格納
+    @result = over_view
 
     # 成功!!
     CODE_VALID

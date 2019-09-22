@@ -1,18 +1,9 @@
 #!/usr/bin/env ruby -KU
-#
 
-class FromDir
 
-  #
-  # 初期化
-  #
-  # _lang_ : 依存図作成言語
-  # _file_ : 依存図作成Path
-  #
-  def initialize( lang, path )
-    @lang = lang
-    @path = path
-  end
+require_relative '../base/creater'
+
+class FromDir < BaseCreater
 
   #
   # 作成の実行

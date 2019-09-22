@@ -8,6 +8,8 @@ require 'optparse'
 require_relative 'creater/from_file'
 require_relative 'creater/from_directory'
 
+CURRENT_DIR = __dir__
+
 lang = ""
 type = ""
 path = ""
@@ -63,17 +65,28 @@ elsif file == "" and path == ""
 end
 
 ## タイプに応じてclassを生成し、そこで依存図の作成を開始する
+creater = nil
 if type == "F"
   # 単一Fileからの生成
   creater = FromFile.new(lang, file)
-  exit(creater.do)
+  status = creater.do
+  if status == CODE_ERROR
+    exit(CODE_ERROR)
+  end
 elsif type  == "D"
   # Directoryからの生成
   creater = FromDir.new(lang, path)
-  exit(creater.do)
+  status = creater.do
+  if status == CODE_ERROR
+    exit(CODE_ERROR)
+  end
+end
+if creater.nil?
+  exit(CODE_ERROR)
 end
 
-puts type
-puts lang
-puts path
-puts file
+# 生成した物をファイルに書き込む
+puts creater.result
+File.open("./output.puml", "w") do | f |
+  f.puts(creater.result)
+end

@@ -2,6 +2,11 @@
 
 class Resource
 
+  attr_accessor :package,
+                :classes,
+                :imports
+
+
   # <editor-fold desc="初期化">
 
   #
