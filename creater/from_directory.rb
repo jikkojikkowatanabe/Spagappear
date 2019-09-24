@@ -31,6 +31,7 @@ class FromDir < BaseCreater
     end
 
     # 読み込んだファイル一覧をloopしてparseしていく
+    generate_files = []
     sources.each do | source |
       puts source.split(/\n/)
 
@@ -38,8 +39,20 @@ class FromDir < BaseCreater
       parser = Java.new(source)
       parser.do
 
-      puts parser.resource
+      # plant umlの生成の開始
+      modeler = Modeling.new(@lang ,parser.resource)
+      generate_file = modeler.do
+      generate_files.push(generate_file)
     end
+
+    # templateを取得
+    over_view = get_template
+
+    # 全体図に生成したClass図を書き込む
+    over_view.gsub!("$CLASS$", generate_files.join("\n\n\n"))
+
+    # 結果を格納
+    @result = over_view
 
     # 成功!!
     CODE_VALID
@@ -52,7 +65,7 @@ class FromDir < BaseCreater
   # @return : まともな場合はTrueが返る
   #
   private def get_files
-    Dir.glob("#{@path}/**/*/*.#{@lang}")
+    Dir.glob("#{@file}/**/*.#{@lang}")
   end
 
 end

@@ -189,8 +189,9 @@ class Java < Parser
   # @return : そうである場合はTrue
   #
   private def is_comment(line)
-    line.match(/^(\s*)\/\//) != nil
+    line.match(/^(\s*)\/\//) != nil or line.match(/\s*\/\*.*\*\//) != nil
   end
+
 
   #
   # コメントの始まりの行かを取得する
@@ -199,7 +200,7 @@ class Java < Parser
   # @return : そうである場合はTrue
   #
   private def is_start_comment(line)
-    line.match(/^(\s*)\/\*/) != nil
+    line.match(/\s*\/\*/) != nil
   end
 
   #
@@ -209,7 +210,7 @@ class Java < Parser
   # @return : そうである場合はTrue
   #
   private def is_end_comment(line)
-    line.match(/^(\s*)\*\//) != nil
+    line.match(/\s*\*\//) != nil
   end
 
   # </editor-fold>
