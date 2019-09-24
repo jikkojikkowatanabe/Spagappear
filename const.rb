@@ -54,6 +54,9 @@ INFO_KEY_FUNC_IS_OVERRIDE = "INFO_KEY_FUNC_IS_OVERRIDE"
 INFO_KEY_FUNC_TYPE = "INFO_KEY_FUNC_TYPE"
 INFO_KEY_FUNC_NAME = "INFO_KEY_FUNC_NAME"
 
+## 言語仕様Key - Annotation
+INFO_KEY_ANNOTATION = "INFO_KEY_IS_ANNOTATION"
+
 ## 言語仕様Key - if
 INFO_KEY_IF_START = "INFO_KEY_IF_START"
 
@@ -76,6 +79,7 @@ INFO_KEY_ACCESSOR_PROTECTED = "INFO_KEY_ACCESSOR_PROTECTED"
 BLOCK_ELEMENT_CLASS = "CLASS"
 BLOCK_ELEMENT_INNER_CLASS = "INNER_CLASS_%s"
 BLOCK_ELEMENT_FUNCTION = "FUNCTION"
+BLOCK_ELEMENT_CONSTRUCTOR = "CONSTRUCTOR"
 BLOCK_ELEMENT_OTHER = "OTHER"
 
 # Java言語仕様Map
@@ -106,14 +110,17 @@ JAVA_INFO = {
     INFO_KEY_NUM_ATTR => "\s*(private|public|protected)\s*",
     INFO_KEY_NUM_IS_STATIC => "\s*static\s*",
     INFO_KEY_NUM_IS_FINAL => "\s*final\s*",
-    INFO_KEY_NUM_TYPE => "\s*[A-Za-z0-9_\-]+\s*",
-    INFO_KEY_NUM_NAME => "\s*[A-Za-z0-9_\-]+\s*",
+    INFO_KEY_NUM_TYPE => "\s*[A-Za-z0-9_\\-]+\s*",
+    INFO_KEY_NUM_NAME => "\s*[A-Za-z0-9_\\-]+\s*",
 
     ## Func
     INFO_KEY_FUNC_START => "\s*(public|private|protected|\s*)\s*[A-Za-z0-9.]+\s*[A-Za-z0-9]+\\(.*\\)\s*(throws\s*.*|\s*)\s*{\s*",
     INFO_KEY_FUNC_ATTR => "\s*(public|protected|private)\s*",
     INFO_KEY_FUNC_TYPE => "\s*[A-Za-z0-9.]+\s*",
-    INFO_KEY_FUNC_NAME => "\s*[A-Za-z0-9_\-]+\s*",
+    INFO_KEY_FUNC_NAME => "\s*[A-Za-z0-9_\\-]+\s*",
+
+    # Annotation
+    INFO_KEY_ANNOTATION => "\s*\\@[A-Za-z0-9]+",
 
     ## if and for and while
     INFO_KEY_IF_START => "\s*if\s*\\(.*\\)\s*{",

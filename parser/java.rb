@@ -46,6 +46,7 @@ class Java < Parser
     parsing_function = nil
     block_elements = []
     is_functioning = false
+    is_annotation = false
 
     @content.split(/\n/).each do | line |
 
@@ -71,6 +72,9 @@ class Java < Parser
 
       # コメント中の場合は次
       next if is_commenting
+
+      # Annotationの行である場合は次
+      next if is_annotation_line(line)
 
       # packageの行である場合はresourceにpackageをセットする
       if is_package(line)
@@ -112,6 +116,11 @@ class Java < Parser
         # parsing classの最後(現在読み取り中であるもの) に (変|定)数をセットする
         parsing_classes.last.add_num(get_num(line))
         next
+      end
+
+      # constructorの始まりの行である場合はconstructor中のフラグをあげ、読み取り中constructorをセットする
+      if is_start_constructor(line, parsing_classes.first) and !is_if_start(line)
+        block_elements.push(BLOCK_ELEMENT_CONSTRUCTOR)
       end
 
       # functionの始まりの行である場合はfunction中のフラグをあげ、読み取り中classをセットする
@@ -210,6 +219,18 @@ class Java < Parser
   #
   private def is_end_comment(line)
     line.match(/^(\s*)\*\//) != nil
+  end
+
+  # </editor-fold>
+
+  # <editor-fold desc="Annotation系">
+
+  #
+  # Annotationの行かを取得する
+  #
+  private def is_annotation_line(line)
+    annotation = JAVA_INFO[INFO_KEY_ANNOTATION]
+    line.match(/#{annotation}/) != nil
   end
 
   # </editor-fold>
