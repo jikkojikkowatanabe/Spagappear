@@ -44,8 +44,9 @@ INFO_KEY_NUM_TYPE = "INFO_KEY_TYPE"
 INFO_KEY_NUM_NAME = "INFO_KEY_NAME"
 
 ## 言語仕様Key - constructor
-INFO_KEY_CONSTRUCTOR = "INFO_KEY_CONSTRUCTOR"
+INFO_KEY_CONSTRUCTOR_START = "INFO_KEY_CONSTRUCTOR_START"
 INFO_KEY_CONSTRUCTOR_ATTR = "INFO_KEY_CONSTRUCTOR_ATTR"
+INFO_KEY_CONSTRUCTOR_NAME = "INFO_KEY_CONSTRUCTOR_NAME"
 
 ## 言語仕様Key - function
 INFO_KEY_FUNC_START = "INFO_KEY_FUNC_START"
@@ -112,6 +113,10 @@ JAVA_INFO = {
     INFO_KEY_NUM_IS_FINAL => "\s*final\s*",
     INFO_KEY_NUM_TYPE => "\s*[A-Za-z0-9_\\-]+\s*",
     INFO_KEY_NUM_NAME => "\s*[A-Za-z0-9_\\-]+\s*",
+
+    ## Constructor
+    INFO_KEY_CONSTRUCTOR_START => "\s*%s\s*\\(.*\\)\s*{",
+    INFO_KEY_CONSTRUCTOR_NAME => "\s*[A-Za-z0-9]+\s*",
 
     ## Func
     INFO_KEY_FUNC_START => "\s*(public|private|protected|\s*)\s*[A-Za-z0-9.]+\s*[A-Za-z0-9]+\\(.*\\)\s*(throws\s*.*|\s*)\s*{\s*",

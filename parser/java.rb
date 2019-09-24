@@ -6,6 +6,7 @@ require_relative '../data/resource'
 require_relative '../data/clazz'
 require_relative '../data/num'
 require_relative '../data/function'
+require_relative '../data/constructor'
 require_relative 'util'
 
 class Java < Parser
@@ -44,9 +45,11 @@ class Java < Parser
     is_commenting = false
     parsing_classes = []
     parsing_function = nil
+    parsing_constructor = nil
     block_elements = []
     is_functioning = false
-    is_annotation = false
+    is_constructing = false
+    annotation = ""
 
     @content.split(/\n/).each do | line |
 
@@ -73,9 +76,6 @@ class Java < Parser
       # コメント中の場合は次
       next if is_commenting
 
-      # Annotationの行である場合は次
-      next if is_annotation_line(line)
-
       # packageの行である場合はresourceにpackageをセットする
       if is_package(line)
         package = get_package(line)
@@ -89,6 +89,9 @@ class Java < Parser
         @resource.add_import(import)
         next
       end
+
+      # Annotationの行である場合は次
+      next if is_annotation_line(line)
 
       # classの始まりの行である場合は、処理が二つのパターンに分けられる
       # 現在がclassの読み取り中でない場合はclass中であることにし、読み取り中classをセットする
@@ -119,8 +122,11 @@ class Java < Parser
       end
 
       # constructorの始まりの行である場合はconstructor中のフラグをあげ、読み取り中constructorをセットする
-      if is_start_constructor(line, parsing_classes.first) and !is_if_start(line)
+      if is_start_constructor(line, parsing_classes.last) and !is_if_start(line)
         block_elements.push(BLOCK_ELEMENT_CONSTRUCTOR)
+        parsing_constructor = get_constructor(line)
+        is_constructing = true
+        next
       end
 
       # functionの始まりの行である場合はfunction中のフラグをあげ、読み取り中classをセットする
@@ -166,19 +172,29 @@ class Java < Parser
           block_elements.pop
           parsed_class = parsing_classes.pop
           @resource.add_class(parsed_class)
-
         # 保持しているBlock情報体配列の最後の情報体がFunctionである
         elsif block_elements.last == BLOCK_ELEMENT_FUNCTION
           block_elements.pop
           parsing_classes.last.add_function(parsing_function)
           parsing_function = nil
           is_functioning = false
+        elsif block_elements.last == BLOCK_ELEMENT_CONSTRUCTOR
+          block_elements.pop
+          parsing_classes.last.set_constructor(parsing_constructor)
+          parsing_constructor = nil
+          is_constructing = false
         end
+        next
       end
 
       # function中の行である
       if is_functioning
         parsing_function.add_line(line)
+      end
+
+      # constructor中の行である
+      if is_constructing
+        parsing_constructor.add_line(line)
       end
 
     end
@@ -251,6 +267,7 @@ class Java < Parser
 
   #
   # 行の文字列からpackageを取得する
+  #
   #
   # @param line : 取得する文字列
   # @return Package
@@ -364,7 +381,35 @@ class Java < Parser
   #
   # 行の文字列からconstructorの行かを取得する
   #
+  # @param line : 行の文字列
+  # @param clazz : 現在parseしているclass
   #
+  # @return : constructorの行である場合はTrue
+  #
+  def is_start_constructor(line, clazz)
+    constructor = JAVA_INFO[INFO_KEY_CONSTRUCTOR_START]
+    constructor_mod = sprintf(constructor, clazz.name)
+    line.match(/#{constructor_mod}/) != nil
+  end
+
+  #
+  # 行からConstructorを取得する
+  #
+  # @param line : 行の文字列
+  #
+  def get_constructor(line)
+    info_func_name = JAVA_INFO[INFO_KEY_CONSTRUCTOR_NAME]
+
+    # get Name
+    name_scan = line[/#{info_func_name}/]
+    unless name_scan.nil?
+      name = name_scan
+      line.sub!(/#{info_func_name}/, "")
+    end
+
+    # 取得した情報を詰めて返す
+    Constructor.new(name)
+  end
 
   # </editor-fold>
 

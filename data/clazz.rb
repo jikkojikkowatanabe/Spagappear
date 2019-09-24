@@ -8,6 +8,7 @@ class Clazz
                 :attr,
                 :extends,
                 :implement,
+                :constructor,
                 :functions,
                 :nums
 
@@ -28,6 +29,7 @@ class Clazz
     @attr = attr
     @extends = extends
     @implement = implement
+    @constructor = nil
     @functions = []
     @nums = []
     @inner_classes = []
@@ -70,6 +72,13 @@ class Clazz
 
   # </editor-fold>
 
+  # <editor-fold desc="Constructor">
+
+  def set_constructor(constructor)
+    @constructor = constructor
+  end
+
+  # </editor-fold>
 
   # <editor-fold desc="関数">
 

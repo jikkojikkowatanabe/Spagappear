@@ -36,7 +36,6 @@ class FromFile < BaseCreater
     parser = Java.new(reader.result)
     parser.do
 
-
     # plant umlの生成の開始
     modeler = Modeling.new(@lang ,parser.resource)
     generate_file = modeler.do
@@ -60,7 +59,7 @@ class FromFile < BaseCreater
   #
   # @return : まともな場合はTrueが返る
   #
-  private def validate()
+  private def validate
     # .で分割し、拡張子がlangと一緒であるかを確認する
 
     ext_name = File.extname(@file)
