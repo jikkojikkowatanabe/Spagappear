@@ -36,6 +36,7 @@ class FromFile < BaseCreater
     parser = Java.new(reader.result)
     parser.do
 
+
     # plant umlの生成の開始
     modeler = Modeling.new(@lang ,parser.resource)
     generate_file = modeler.do
@@ -61,13 +62,10 @@ class FromFile < BaseCreater
   #
   private def validate()
     # .で分割し、拡張子がlangと一緒であるかを確認する
-    split_file = @file.split(".")
-    if split_file.count < 2
-      puts "file is invalid, file extension is not found"
-      return CODE_ERROR
-    end
-    if split_file[1] != @lang
-      puts "file is invalid, you input #{@lang}, but file extension is #{split_file[1]}"
+
+    ext_name = File.extname(@file)
+    if ext_name != "." + @lang
+      puts "file is invalid, you input #{@lang}, but file extension is #{ext_name}"
       return CODE_ERROR
     end
 
